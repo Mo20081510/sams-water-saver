@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Aque Management System (SAMS)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      margin: 0;
+      padding: 15px;
+      color: #0d47a1;
+    }
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+    h1 {
+      text-align: center;
+      color: #0288d1;
+      margin-bottom: 5px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #546e7a;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .metric {
+      font-size: 24px;
+      margin: 20px 0;
+      font-weight: bold;
+      text-align: center;
+    }
+    .alert {
+      background-color: #ffebee;
+      color: #c62828;
+      padding: 14px;
+      border-radius: 10px;
+      margin: 20px 0;
+      display: none;
+      text-align: center;
+      font-weight: bold;
+      border-right: 4px solid #d32f2f;
+    }
+    .impact {
+      background: #e8f5e9;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+      border-right: 4px solid #4caf50;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #546e7a;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💧 Smart Aque Management System (SAMS)</h1>
+    <div class="subtitle">من إعداد: محمد حمدي – مدرسة المتفوقين للعلوم والتكنولوجيا (STEM)</div>
+    
+    <div class="metric">
+      الاستهلاك اليومي: <span id="consumption">--</span> لتر
+    </div>
+
+    <div id="alertBox" class="alert">
+      ⚠️ تنبيه: استهلاكك تجاوز الحد اليومي (4.1 لتر لكل استخدام)!
+    </div>
+
+    <div class="impact" id="impactBox">
+      <!-- سيتم ملؤه تلقائيًا -->
+    </div>
+
+    <canvas id="consumptionChart" height="150"></canvas>
+
+    <div class="footer">
+      مشروع يهدف إلى تقليل هدر المياه بنسبة 34% وتحسين جودة المياه بنسبة 90%
+    </div>
+  </div>
+
+  <script>
+    // === الإعدادات حسب بحثك ===
+    const DAILY_LIMIT_PER_USE = 4.1; // من نتائجك: 4.1 لتر لكل استخدام
+    const USES_PER_DAY = 5; // تقدير: متوسط استخدامات يومية (يمكنك تعديله لاحقًا)
+    const DAILY_LIMIT = DAILY_LIMIT_PER_USE * USES_PER_DAY; // ~20.5 لتر/يوم
+
+    // === دالة التحديث ===
+    function updateDisplay(liters) {
+      const consumptionEl = document.getElementById('consumption');
+      const alertBox = document.getElementById('alertBox');
+      const impactBox = document.getElementById('impactBox');
+
+      consumptionEl.textContent = liters.toFixed(1);
+
+      // حساب التأثير البيئي بناءً على بحثك
+      const trees = Math.floor((liters * 30) / 1000) * 200; // من بحثك: 200 شجرة أسبوعيًا لكل 1000 م³ = 1000000 لتر → كل 5000 لتر = 200 شجرة؟
+      // لكننا نبسّط: كل 50 لتر وفر = شجرة واحدة (تقريبي لعرض مرئي)
+      const simplifiedTrees = Math.floor(liters / 50);
+      
+      const electricitySaved = (liters * 0.24 / 1000).toFixed(2); // من بحثك: 0.24 kWh لكل م³ (1000 لتر)
+
+      impactBox.innerHTML = `
+        🌱 وفرت ما يكفي لري <strong>${s
